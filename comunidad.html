@@ -1,0 +1,29 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LaRedSMP — Comunidad</title><link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="site.css"><link rel="stylesheet" href="cart.css"><link rel="stylesheet" href="identity.css"><link rel="stylesheet" href="comunidad.css"><script src="catalog.js" defer></script><script src="cart.js" defer></script><script src="comunidad.js" defer></script></head><body>
+<nav class="nav"><a class="brand" href="index.html"><img src="assets/logo.png" alt="LaRedSMP"></a><div class="navlinks"><a href="index.html">Inicio</a><a href="tienda.html">Tienda</a><a href="rangos.html">Rangos</a><a href="economia.html">Economía</a><a class="current" href="comunidad.html">Comunidad</a></div></nav>
+<main><header class="page-hero"><div class="inner"><h1>Comunidad</h1></div></header>
+<div class="community-wrap"><nav class="community-tabs" aria-label="Participar"><a href="#ideas">Sugerir una idea</a><a href="#creadores">Postular como creador</a></nav>
+<p class="community-notice">Estos formularios preparan un mensaje, no lo envían. Cópialo y compártelo con el equipo en Discord. No incluyas contraseñas, direcciones ni información privada.</p>
+<div class="community-grid">
+<section class="community-panel" id="ideas"><h2>Ideas para el servidor</h2>
+<form data-kind="Sugerencia para LaRedSMP">
+<label>Nombre en Minecraft<input name="Nombre en Minecraft" required maxlength="32" autocomplete="off"></label>
+<label>Categoría<select name="Categoría"><option>Survival y exploración</option><option>Economía y tienda</option><option>PvP y clanes</option><option>Eventos</option><option>Calidad de vida</option><option>Otra idea</option></select></label>
+<label>Título de tu idea<input name="Idea" required maxlength="100"></label>
+<label>¿Cómo funcionaría y qué mejoraría?<textarea name="Propuesta" required minlength="20" maxlength="1500" rows="6"></textarea></label>
+<label>¿Cómo evitarías ventajas injustas? (opcional)<textarea name="Equilibrio" maxlength="600" rows="3"></textarea></label>
+<button class="button" type="submit">Preparar sugerencia</button>
+</form></section>
+<section class="community-panel" id="creadores"><h2>Postula como creador</h2>
+<p>Solicita un rango de creador. La postulación no garantiza su aprobación; los requisitos y beneficios están pendientes de definir.</p>
+<form data-kind="Postulación de creador — LaRedSMP">
+<label>Nombre en Minecraft<input name="Nombre en Minecraft" required maxlength="32" autocomplete="off"></label>
+<label>Rango solicitado<select name="Rango solicitado"><option>Influencer</option><option>TikToker</option><option>YouTuber</option><option>Streamer</option><option>Otro creador</option></select></label>
+<label>Enlace público de tu canal o perfil<input name="Canal" type="url" placeholder="https://" required maxlength="300"></label>
+<label>Seguidores o suscriptores<input name="Seguidores" type="number" min="0" max="1000000000" step="1" required></label>
+<label>¿Qué contenido harías sobre LaRedSMP?<textarea name="Contenido propuesto" required minlength="20" maxlength="1500" rows="5"></textarea></label>
+<label>Enlace de ejemplo (opcional)<input name="Ejemplo" type="url" placeholder="https://" maxlength="300"></label>
+<button class="button" type="submit">Preparar postulación</button>
+</form></section>
+</div>
+<section class="community-result" hidden aria-labelledby="preview-title"><h2 id="preview-title">Tu mensaje</h2><p>Revísalo antes de compartirlo. Todavía no se ha enviado.</p><textarea readonly rows="12" aria-label="Mensaje preparado"></textarea><div class="actions"><button class="button" type="button" id="copy-community">Copiar mensaje</button><a class="button" href="https://discord.gg/AKA9tEqUUM" target="_blank" rel="noopener">Abrir Discord</a></div><p role="status" id="community-status"></p></section>
+<noscript>Activa JavaScript para preparar el mensaje, o comparte tu propuesta directamente en Discord.</noscript></div></main><footer class="footer"><span>LaRedSMP</span><a href="index.html">Volver al inicio</a></footer></body></html>
