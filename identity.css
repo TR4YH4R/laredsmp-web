@@ -1,11 +1,11 @@
 /* Subdued scenery behind merchandise; keep the page landscape unchanged. */
-html body .store-card,html body .store-ranks{background-image:linear-gradient(90deg,#171719bd,#211b20ef 72%),url('assets/hero-survival.png')}
-html body .product .visual,html body .product:nth-child(2) .visual,html body .product:nth-child(3) .visual{background-image:linear-gradient(180deg,#171719b8,#19191bdf),url('assets/hero-survival.png')}
-html body .product>div:last-child{background-image:linear-gradient(135deg,#282227f5,#211f24fa),url('assets/hero-survival.png')}
-html body .tile{background-image:linear-gradient(90deg,#19191bf2,#19191bbd),url('assets/hero-survival.png')}
+html body .store-card,html body .store-ranks{background-image:linear-gradient(90deg,#171719bd,#211b20ef 72%),url('assets/hero-survival.jpg')}
+html body .product .visual,html body .product:nth-child(2) .visual,html body .product:nth-child(3) .visual{background-image:linear-gradient(180deg,#171719b8,#19191bdf),url('assets/hero-survival.jpg')}
+html body .product>div:last-child{background-image:linear-gradient(135deg,#282227f5,#211f24fa),url('assets/hero-survival.jpg')}
+html body .tile{background-image:linear-gradient(90deg,#19191bf2,#19191bbd),url('assets/hero-survival.jpg')}
 /* A viewport-sized scenic layer stays visible throughout long spawner lists. */
 html:has(.spawner-group){isolation:isolate;background:#171719}
-body:has(.spawner-group)::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#10101155,#10101199),url('assets/hero-survival.png') center center/cover no-repeat}
+body:has(.spawner-group)::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#10101155,#10101199),url('assets/hero-survival.jpg') center center/cover no-repeat}
 html body:has(.spawner-group){background:none}
 /* LaRed: quiet surfaces, strong red identity, a single typographic voice. */
 body .nav .brand{flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;width:150px;height:70px;overflow:hidden}
@@ -48,7 +48,7 @@ body .product[hidden],body .spawner-group[hidden]{display:none}
 :root{--ink:#101011;--panel:#19191b;--panel2:#232326;--line:#343437;--paper:#f5f5f2;--muted:#aeafb4;--red:#be292e;--red2:#ff595e;--gold:#e7c777;--wrap:min(1180px,calc(100% - 48px))}
 body{background:var(--ink);font-family:Manrope,system-ui,sans-serif}
 /* Scenic backdrops reuse the server's survival artwork. */
-body{background-image:linear-gradient(to bottom,#10101125 80px,#1010119c 440px,#101011 1000px),url('assets/hero-survival.png');background-position:center top,center 82px;background-size:100% 1100px,auto 1000px;background-repeat:no-repeat}
+body{background-image:linear-gradient(to bottom,#10101125 80px,#1010119c 440px,#101011 1000px),url('assets/hero-survival.jpg');background-position:center top,center 82px;background-size:100% 1100px,auto 1000px;background-repeat:no-repeat}
 body .page-hero,body .category-nav+main .page-hero{display:flex;align-items:center}
 body .page-hero h1{text-shadow:0 3px 20px #000a}
 body .catalog{position:relative}
@@ -109,26 +109,26 @@ body .cart-dialog button:disabled{background:#303034;color:#c3c3c7;opacity:1}
 @media(max-width:600px){:root{--wrap:calc(100% - 32px)}body .nav{padding-inline:16px}body .navlinks{justify-content:space-between}body .navlinks a{font-size:13px;padding:10px}body .page-hero,body .category-nav+main .page-hero{padding:32px 0 24px}body .store-grid{grid-template-columns:1fr;gap:12px}body .store-card{grid-column:auto;grid-template-columns:38% 62%;min-height:205px}body .store-art{height:auto;padding:12px}body .store-art img{width:100%;height:150px}body .store-info{padding:22px 18px 22px 8px}body .store-info h2{font-size:25px}body .store-price{font-size:13px}body .store-action{margin-top:18px;padding-top:12px}body .category-nav a{padding:12px 11px;font-size:13px}body .product-grid{gap:16px}body .cart-dialog{padding:20px}}
 @media(prefers-reduced-motion:reduce){body .store-card:hover,body .product:hover,body .tile:hover,body .store-card:hover img,body .product:hover .visual img{transform:none}}
 body .page-hero,body .category-nav+main .page-hero{min-height:220px;background:linear-gradient(90deg,#101011a8,#10101115);border-bottom:1px solid #ffffff18;margin-bottom:24px}
-body .store-card{background-image:linear-gradient(90deg,#19191b80,#19191bf5 65%),url('assets/hero-survival.png');background-size:cover,auto 520px;background-position:center,left center;border-color:#ffffff29}
-body .store-ranks{background-image:linear-gradient(90deg,#28151870,#281518f5 68%),url('assets/hero-survival.png');background-position:center,right 40%}
+body .store-card{background-image:linear-gradient(90deg,#19191b80,#19191bf5 65%),url('assets/hero-survival.jpg');background-size:cover,auto 520px;background-position:center,left center;border-color:#ffffff29}
+body .store-ranks{background-image:linear-gradient(90deg,#28151870,#281518f5 68%),url('assets/hero-survival.jpg');background-position:center,right 40%}
 /* Scenic inventory panels, with a shaded reading area. */
-body .store-card,body .store-ranks{background-image:linear-gradient(90deg,#17171935,#211b20d9 72%),url('assets/hero-survival.png');background-size:cover,auto 480px;background-position:center,20% 60%;background-color:#202022;border:1px solid #535052;border-radius:3px;box-shadow:inset 0 2px #ffffff0c,inset 0 -3px #0005}
+body .store-card,body .store-ranks{background-image:linear-gradient(90deg,#17171935,#211b20d9 72%),url('assets/hero-survival.jpg');background-size:cover,auto 480px;background-position:center,20% 60%;background-color:#202022;border:1px solid #535052;border-radius:3px;box-shadow:inset 0 2px #ffffff0c,inset 0 -3px #0005}
 body .store-ranks{background-color:#2b2022;border-color:#755054}
 body .store-art{background:linear-gradient(135deg,#ffffff05,transparent 65%);border-right:1px solid #ffffff09}
 body .store-action>span{font-size:0}
 body .store-action>span::after{content:'→';font-size:20px}
 body .product{border-radius:3px;box-shadow:inset 0 2px #ffffff0a,inset 0 -3px #0004}
-body .product .visual,body .product:nth-child(2) .visual,body .product:nth-child(3) .visual{background-image:linear-gradient(180deg,#17171925,#19191b99),url('assets/hero-survival.png');background-size:cover,auto 440px;background-position:center,18% 65%;box-shadow:inset 3px 3px #0003,inset -3px -3px #ffffff05}
+body .product .visual,body .product:nth-child(2) .visual,body .product:nth-child(3) .visual{background-image:linear-gradient(180deg,#17171925,#19191b99),url('assets/hero-survival.jpg');background-size:cover,auto 440px;background-position:center,18% 65%;box-shadow:inset 3px 3px #0003,inset -3px -3px #ffffff05}
 body .product:nth-child(2) .visual{background-position:center,55% 50%}
 body .product:nth-child(3) .visual{background-position:center,85% 45%}
-body .product>div:last-child{background:linear-gradient(135deg,#33272ce8,#211f24f2),url('assets/hero-survival.png') center bottom/cover}
+body .product>div:last-child{background:linear-gradient(135deg,#33272ce8,#211f24f2),url('assets/hero-survival.jpg') center bottom/cover}
 body .store-coins{background-position:center,85% 45%}
 body .store-keys{background-position:center,8% 70%}
 body .store-spawners{background-position:center,48% 85%}
-body .tile{background-image:linear-gradient(90deg,#19191bea,#19191b70),url('assets/hero-survival.png');background-size:cover;background-position:center}
+body .tile{background-image:linear-gradient(90deg,#19191bea,#19191b70),url('assets/hero-survival.jpg');background-size:cover;background-position:center}
 body .tile:nth-child(2){background-position:65% center}
 body .tile:nth-child(3){background-position:right center}
-body .worldbar.live-world{background-image:linear-gradient(90deg,#1b1922ed,#272127df),url('assets/hero-survival.png');background-size:cover;background-position:center 70%}
+body .worldbar.live-world{background-image:linear-gradient(90deg,#1b1922ed,#272127df),url('assets/hero-survival.jpg');background-size:cover;background-position:center 70%}
 body .small-button,body .product .small-button,body .button{border-radius:3px;box-shadow:inset 0 2px #ffffff20,inset 0 -3px #0003}
 body a:focus-visible,body button:focus-visible,body input:focus-visible{outline:2px solid #f5f5f2;outline-offset:4px}
 body .store-info h2{letter-spacing:-.025em}
