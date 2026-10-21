@@ -2,7 +2,7 @@
   const catalog = window.STORE_CATALOG;
   const key = 'lared-cart-v1';
   let state = {items:{}, username:''};
-  try { const saved=JSON.parse(localStorage.getItem(key)); if(saved && typeof saved==='object'){state.username=typeof saved.username==='string'?saved.username.slice(0,32):''; for(const [id,n] of Object.entries(saved.items||{})) if(catalog[id] && Number.isInteger(n) && n>0 && n<=99) state.items[id]=n;} } catch {}
+  try { const saved=JSON.parse(localStorage.getItem(key)); if(saved && typeof saved==='object'){state.username=typeof saved.username==='string'?saved.username.slice(0,32):''; for(const [id,n] of Object.entries(saved.items||{})) if(catalog[id] && Number.isInteger(n) && n>0 && n<=99) state.items[id]=catalog[id].unit==='meses'?1:n;} } catch {}
   const el=(tag,text,cls)=>{const n=document.createElement(tag); if(text)n.textContent=text;if(cls)n.className=cls;return n;};
   const money=n=>'$'+new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n/100)+' USD';
   const status=el('div','','cart-toast');status.setAttribute('role','status');document.body.append(status);
@@ -40,14 +40,14 @@
   function count(){trigger.textContent='Carrito ('+Object.values(state.items).reduce((a,b)=>a+b,0)+')';}
   function render(){list.replaceChildren();let sum=0;
     for(const [id,n] of Object.entries(state.items)){const p=catalog[id];sum+=p.cents*n;const row=el('article','','cart-line');const img=el('img');img.src=p.image;img.alt='';const details=el('div');details.append(el('h3',p.name),el('p',money(p.cents)+' / '+(p.unit==='meses'?'mes':p.unit==='unidades'?'unidad':'pack')));
-      const qty=el('input');qty.type='number';qty.min=1;qty.max=99;qty.step=1;qty.value=n;qty.setAttribute('aria-label','Cantidad de '+p.name);qty.onchange=()=>{if(!qty.checkValidity()||!Number.isInteger(qty.valueAsNumber)){qty.reportValidity();qty.value=state.items[id];return;}state.items[id]=qty.valueAsNumber;save();render();};
+      const qty=el('input');qty.type='number';qty.min=1;qty.max=99;qty.step=1;qty.value=n;if(p.unit==='meses'){qty.max=1;qty.disabled=true;}qty.setAttribute('aria-label','Cantidad de '+p.name);qty.onchange=()=>{if(!qty.checkValidity()||!Number.isInteger(qty.valueAsNumber)){qty.reportValidity();qty.value=state.items[id];return;}state.items[id]=qty.valueAsNumber;save();render();};
       const remove=el('button','Quitar');remove.type='button';remove.setAttribute('aria-label','Quitar '+p.name);remove.onclick=()=>{delete state.items[id];save();render();};details.append(qty,remove,el('strong',money(p.cents*n)));row.append(img,details);list.append(row);
     }
     if(!Object.keys(state.items).length) list.append(el('p','Tu carrito está vacío. Añade productos desde el catálogo.'));
     total.textContent='Total estimado: '+money(sum);
   }
   trigger.onclick=()=>{render();dialog.showModal();};
-  document.querySelectorAll('[data-add]').forEach(button=>button.onclick=()=>{const id=button.dataset.add;const input=button.parentElement.querySelector('input');if(!input.checkValidity()||!Number.isInteger(input.valueAsNumber)){input.reportValidity();return;}const n=(state.items[id]||0)+input.valueAsNumber;if(n>99){announce('Máximo 99 por producto en el carrito.');return;}state.items[id]=n;save();announce('Añadido: '+catalog[id].name);});
+  document.querySelectorAll('[data-add]').forEach(button=>button.onclick=()=>{const id=button.dataset.add;const input=button.parentElement.querySelector('input');if(!input.checkValidity()||!Number.isInteger(input.valueAsNumber)){input.reportValidity();return;}if(catalog[id].unit==='meses'){state.items[id]=1;save();announce('Añadido: '+catalog[id].name+' (suscripción mensual: se renueva sola cada mes).');return;}const n=(state.items[id]||0)+input.valueAsNumber;if(n>99){announce('Máximo 99 por producto en el carrito.');return;}state.items[id]=n;save();announce('Añadido: '+catalog[id].name);});
   // Public sharing excludes local preview URLs and all cart/player information.
   const localPreview=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
   const shareBar=el('div','','share-bar');
