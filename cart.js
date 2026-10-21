@@ -17,8 +17,25 @@
   const label=el('label','Nombre exacto en Minecraft');const user=el('input');user.type='text';user.maxLength=32;user.autocomplete='off';user.spellcheck=false;user.value=state.username;label.append(user);
   const hint=el('p','Usa tu nombre del juego, incluido el prefijo si juegas en Bedrock. Se guarda únicamente en este navegador.','cart-note');
   user.addEventListener('input',()=>{state.username=user.value.trim();save();});
-  const notice=el('p','El pago y la entrega automática estarán disponibles cuando conectemos Tebex. Este carrito no realiza compras.','cart-note');
-  const checkout=el('button','Pago próximamente','small-button');checkout.disabled=true;
+  const notice=el('p','El pago se realiza en Tebex, nuestra plataforma de pagos. La entrega es automática al confirmarse el pago. Los rangos son suscripciones mensuales (se renuevan cada mes) y puedes cancelarlas desde Tebex.','cart-note');
+  const checkout=el('button','Pagar con Tebex','small-button');checkout.type='button';
+  const TEBEX={token:'143ub-bf976289cf3a0b5dbaeb4a98e8054dd8f0ae8ce5',api:'https://headless.tebex.io/api'};
+  const api=async(path,body)=>{const r=await fetch(TEBEX.api+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('tebex '+r.status);return (await r.json()).data;};
+  checkout.onclick=async()=>{
+    const name=state.username.trim();
+    if(!Object.keys(state.items).length){announce('Tu carrito está vacío.');return;}
+    if(!/^\.?[A-Za-z0-9_]{3,16}$/.test(name)){announce('Escribe tu nombre exacto de Minecraft (3 a 16 letras, números o _; en Bedrock empieza con punto).');user.focus();return;}
+    checkout.disabled=true;checkout.textContent='Creando pago…';
+    try{
+      const here=location.origin+location.pathname.replace(/[^/]*$/,'')+'tienda.html';
+      const basket=await api('/accounts/'+TEBEX.token+'/baskets',{complete_url:here+'?pago=ok',cancel_url:here+'?pago=cancelado',username:name});
+      for(const [id,n] of Object.entries(state.items)){
+        const qty=catalog[id].unit==='meses'?1:n;
+        await api('/baskets/'+basket.ident+'/packages',{package_id:catalog[id].tebex,quantity:qty});
+      }
+      location.href='https://pay.tebex.io/'+basket.ident;
+    }catch(e){announce('No se pudo crear el pago. Inténtalo de nuevo o escríbenos en Discord.');checkout.disabled=false;checkout.textContent='Pagar con Tebex';}
+  };
   dialog.append(close,heading,list,total,label,hint,notice,checkout);document.body.append(dialog);
   function count(){trigger.textContent='Carrito ('+Object.values(state.items).reduce((a,b)=>a+b,0)+')';}
   function render(){list.replaceChildren();let sum=0;
