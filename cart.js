@@ -7,7 +7,7 @@
   const money=n=>'$'+new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n/100)+' USD';
   const status=el('div','','cart-toast');status.setAttribute('role','status');document.body.append(status);
   let timer;
-  function announce(message){status.textContent=message;clearTimeout(timer);timer=setTimeout(()=>status.textContent='',4000);}
+  function announce(message,ms){status.textContent=message;clearTimeout(timer);timer=setTimeout(()=>status.textContent='',ms||4000);}
   function save(){try{localStorage.setItem(key,JSON.stringify(state));}catch{announce('No se pudo guardar: el carrito durará solo esta visita.');} count();}
   const trigger=el('button','Carrito','cart-trigger');trigger.type='button';document.querySelector('.nav').append(trigger);
   const dialog=el('dialog','','cart-dialog');dialog.setAttribute('aria-labelledby','cart-heading');
@@ -15,9 +15,9 @@
   const close=el('button','Cerrar','cart-close');close.type='button';close.onclick=()=>dialog.close();
   const list=el('div','','cart-lines');const total=el('p','','cart-total');
   const label=el('label','Nombre exacto en Minecraft');const user=el('input');user.type='text';user.maxLength=32;user.autocomplete='off';user.spellcheck=false;user.value=state.username;label.append(user);
-  const hint=el('p','Usa tu nombre del juego, incluido el prefijo si juegas en Bedrock. Se guarda únicamente en este navegador.','cart-note');
+  const hint=el('p','Escribe tu nombre exacto del juego (en Bedrock con un punto al inicio, ej: .TuNombre). Si el nombre está mal, la compra le llega a otra cuenta.','cart-note');
   user.addEventListener('input',()=>{state.username=user.value.trim();save();});
-  const notice=el('p','El pago se realiza en Tebex, nuestra plataforma de pagos. La entrega es automática al confirmarse el pago. Los rangos son suscripciones mensuales (se renuevan cada mes) y puedes cancelarlas desde Tebex.','cart-note');
+  const notice=el('p','El pago lo procesa Tebex (vendedor oficial). La entrega es automática cuando estés conectado al servidor. Los rangos se cobran cada mes hasta que los canceles desde Tebex; el rango mayor ya incluye a los menores (no se suman). Productos digitales: sin reembolso salvo error de entrega.','cart-note');
   const checkout=el('button','Pagar con Tebex','small-button');checkout.type='button';
   const TEBEX={token:'143ub-bf976289cf3a0b5dbaeb4a98e8054dd8f0ae8ce5',api:'https://headless.tebex.io/api'};
   const api=async(path,body)=>{const r=await fetch(TEBEX.api+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error('tebex '+r.status);return (await r.json()).data;};
@@ -33,8 +33,8 @@
         const qty=catalog[id].unit==='meses'?1:n;
         await api('/baskets/'+basket.ident+'/packages',{package_id:catalog[id].tebex,quantity:qty});
       }
-      location.href='https://pay.tebex.io/'+basket.ident;
-    }catch(e){announce('No se pudo crear el pago. Inténtalo de nuevo o escríbenos en Discord.');checkout.disabled=false;checkout.textContent='Pagar con Tebex';}
+      location.href=(basket.links&&basket.links.checkout)||('https://pay.tebex.io/'+basket.ident);
+    }catch(e){console.error('Tebex',e);announce('No se pudo crear el pago. Inténtalo de nuevo o escríbenos en Discord.');checkout.disabled=false;checkout.textContent='Pagar con Tebex';}
   };
   dialog.append(close,heading,list,total,label,hint,notice,checkout);document.body.append(dialog);
   function count(){trigger.textContent='Carrito ('+Object.values(state.items).reduce((a,b)=>a+b,0)+')';}
@@ -52,7 +52,7 @@
   const localPreview=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
   const shareBar=el('div','','share-bar');
   const share=el('button',localPreview?'Copiar texto para compartir':'Compartir tienda','share-button');share.type='button';
-  share.onclick=async()=>{const text='LaRedSMP · Survival semi-anárquico. Explora rangos mensuales, RedCoins, llaves y spawners. Comunidad y novedades: https://discord.gg/AKA9tEqUUM';const url=localPreview?'':location.origin+'/tienda.html';try{if(!localPreview && navigator.share)await navigator.share({title:'LaRedSMP',text,url});else{await navigator.clipboard.writeText(text+(url?'\n'+url:''));announce('Texto copiado para compartir.');}}catch(error){if(error.name!=='AbortError')announce('No se pudo copiar. Puedes compartir nuestro enlace de Discord.');}};
+  share.onclick=async()=>{const text='LaRedSMP · Survival semi-anárquico. Explora rangos mensuales, RedCoins, llaves y spawners. Comunidad y novedades: https://discord.gg/AKA9tEqUUM';const url=localPreview?'':location.origin+location.pathname.replace(/[^/]*$/,'')+'tienda.html';try{if(!localPreview && navigator.share)await navigator.share({title:'LaRedSMP',text,url});else{await navigator.clipboard.writeText(text+(url?'\n'+url:''));announce('Texto copiado para compartir.');}}catch(error){if(error.name!=='AbortError')announce('No se pudo copiar. Puedes compartir nuestro enlace de Discord.');}};
   if(document.querySelector('.store-home')){shareBar.append(el('span','Invita a tu comunidad'),share);document.querySelector('.catalog').append(shareBar);}
   const coinAmounts={'redcoins-1':2500,'redcoins-2':6000,'redcoins-3':15000};
   const best=Object.keys(coinAmounts).reduce((a,b)=>coinAmounts[a]/catalog[a].cents>coinAmounts[b]/catalog[b].cents?a:b);
@@ -61,5 +61,10 @@
   });
   const groups=[...document.querySelectorAll('.spawner-group')];
   if(groups.length){const bar=el('div','','catalog-search');const label=el('label','Buscar spawner');const search=el('input');search.type='search';search.placeholder='Por ejemplo: creeper';label.append(search);const result=el('span');result.setAttribute('role','status');bar.append(label,result);document.querySelector('.catalog').prepend(bar);const normalize=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();const filter=()=>{let count=0;groups.forEach(group=>{let visible=0;group.querySelectorAll('.product').forEach(card=>{card.hidden=!normalize(card.querySelector('h3').textContent).includes(normalize(search.value.trim()));if(!card.hidden){visible++;count++;}});group.hidden=visible===0;});result.textContent=count?count+' spawners':'No hay resultados. Prueba otro nombre.';};search.oninput=filter;filter();}
+  // Regreso desde Tebex (complete_url / cancel_url)
+  const pago=new URLSearchParams(location.search).get('pago');
+  if(pago==='ok'){state.items={};save();announce('¡Pago recibido! Entra al servidor para recibir tu compra (debes estar conectado).',15000);}
+  else if(pago==='cancelado'){announce('Pago cancelado. Tu carrito sigue guardado.',10000);}
+  if(pago){try{history.replaceState(null,'',location.pathname);}catch{}}
   count();
 })();
