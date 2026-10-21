@@ -36,7 +36,8 @@
       location.href=(basket.links&&basket.links.checkout)||('https://pay.tebex.io/'+basket.ident);
     }catch(e){console.error('Tebex',e);announce('No se pudo crear el pago. Inténtalo de nuevo o escríbenos en Discord.');checkout.disabled=false;checkout.textContent='Pagar con Tebex';}
   };
-  dialog.append(close,heading,list,total,label,hint,notice,checkout);document.body.append(dialog);
+  const terms=el('a','Términos y reembolsos','cart-note');terms.href='terminos.html';
+  dialog.append(close,heading,list,total,label,hint,notice,terms,checkout);document.body.append(dialog);
   function count(){trigger.textContent='Carrito ('+Object.values(state.items).reduce((a,b)=>a+b,0)+')';}
   function render(){list.replaceChildren();let sum=0;
     for(const [id,n] of Object.entries(state.items)){const p=catalog[id];sum+=p.cents*n;const row=el('article','','cart-line');const img=el('img');img.src=p.image;img.alt='';const details=el('div');details.append(el('h3',p.name),el('p',money(p.cents)+' / '+(p.unit==='meses'?'mes':p.unit==='unidades'?'unidad':'pack')));
